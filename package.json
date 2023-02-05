@@ -1,0 +1,23 @@
+{
+  "name": "cirgraph",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/singrum/cirgraph.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/singrum/cirgraph/issues"
+  },
+  "homepage": "https://github.com/singrum/cirgraph#readme",
+  "dependencies": {
+    "cytoscape": "^3.23.0",
+    "cytoscape-cose-bilkent": "^4.1.0"
+  }
+}
