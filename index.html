@@ -54,9 +54,9 @@
                 })
                 
             }
-            console.log(idmap)
             
-            let nodes = [...Array(Object.keys(idmap).length).keys()].map(i => ({ id: i, char : charmap[i]}));
+            
+            let nodes = [...Array(Object.keys(idmap).length).keys()].map(i => ({ id: i, label: charmap[i]}));
             
             
             let links = [];
@@ -64,7 +64,9 @@
                 
                 links.push({
                     source : idmap[arr[i][0]],
-                    target : idmap[arr[i][1]]
+                    target : idmap[arr[i][1]],
+                    
+
                 })
             }
             
@@ -74,14 +76,47 @@
             const gData2 = {
                 nodes,links
             };
-            console.log(gData)
-            console.log(gData2)
-
             const Graph = ForceGraph()
                 (document.getElementById('graph'))
                 .graphData(gData2)
-                .linkDirectionalArrowLength(6);
+                .linkDirectionalArrowLength(3)
+                // .nodeLabel('char')
+                .onNodeClick(node => {
+                    // Center/zoom on node
+                    Graph.centerAt(node.x, node.y, 1000);
+                    Graph.zoom(8, 2000);
+                })
+                .nodeCanvasObject((node, ctx, globalScale) => {
+                    const label = node.label || '';
+                    const fontSize = 5;
+                    ctx.font = `${fontSize}px Sans-Serif`;
+                    const textWidth = ctx.measureText(label).width;
+                    const radius = 3;
+
+                    // draw circle
+                    ctx.beginPath();
+                    ctx.arc(node.x, node.y, radius, 0, 2 * Math.PI, false);
+                    ctx.fillStyle = node.color;
+                    ctx.stroke();
+                    ctx.lineWidth=0.5;
+                    ctx.closePath();
+
+                    // draw text
+                    ctx.fillStyle = '#000000';
+                    ctx.fillText(label, node.x - textWidth/2, node.y + fontSize/3);
+                    })
+                .linkWidth(2)
+                .linkDirectionalArrowLength(3)
+                .nodeRelSize(5)
+                .linkColor(()=>"#666666")
+                .nodeAutoColorBy(node => node.id)
+                .maxZoom(15)
+                .minZoom(1)
+                
+
         }
+
+        
 
     </script>
 </body>
