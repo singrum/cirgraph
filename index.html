@@ -1,29 +1,87 @@
 <head>
-  <style> body { margin: 0; } </style>
+    <style>
+        body {
+            margin: 0;
+        }
+    </style>
 
-  <script src="//unpkg.com/force-graph"></script>
-  <!--<script src="../../dist/force-graph.js"></script>-->
+    <script src="//unpkg.com/force-graph"></script>
+    <!--<script src="../../dist/force-graph.js"></script>-->
 </head>
 
 <body>
-  <div id="graph"></div>
+    <div id="graph"></div>
 
-  <script>
-    // Random tree
-    const N = 40;
-    const gData = {
-      nodes: [...Array(N).keys()].map(i => ({ id: i })),
-      links: [...Array(N).keys()]
-        .filter(id => id)
-        .map(id => ({
-          source: id,
-          target: Math.round(Math.random() * (id-1))
-        }))
-    };
+    <script>
+        // Random tree
+        fetch("data.txt")
+            .then(data => data.text())
+            .then(text => {
+                const arr = text.split('\n').map(e => e.split(' '));
+                makeGraph(arr);
 
-    const Graph = ForceGraph()
-    (document.getElementById('graph'))
-      .graphData(gData)
-      .linkDirectionalArrowLength(6);
-  </script>
+            })
+
+
+        function makeGraph(arr) {
+            const N = 40;
+            const gData = {
+                nodes: [...Array(N).keys()].map(i => ({ id: i })),
+
+                links: [...Array(N).keys()]
+                    .filter(id => id)
+                    .map(id => ({
+                        source: id,
+                        target: Math.round(Math.random() * (id - 1))
+                    }))
+            };
+
+            
+            let idmap = {};
+            let charmap={};
+            
+            let index = 0;
+            for(let i = 0; i<arr.length; i++){
+                arr[i].forEach(e=>{
+                    if(e in idmap){
+                        return;
+                    }
+                    else{
+                        idmap[e] = index;
+                        charmap[index] = e;
+                        index++;
+                    }
+                })
+                
+            }
+            console.log(idmap)
+            
+            let nodes = [...Array(Object.keys(idmap).length).keys()].map(i => ({ id: i, char : charmap[i]}));
+            
+            
+            let links = [];
+            for(let i = 0; i<arr.length; i++){
+                
+                links.push({
+                    source : idmap[arr[i][0]],
+                    target : idmap[arr[i][1]]
+                })
+            }
+            
+
+
+
+            const gData2 = {
+                nodes,links
+            };
+            console.log(gData)
+            console.log(gData2)
+
+            const Graph = ForceGraph()
+                (document.getElementById('graph'))
+                .graphData(gData2)
+                .linkDirectionalArrowLength(6);
+        }
+
+    </script>
 </body>
