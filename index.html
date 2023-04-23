@@ -6,6 +6,7 @@
     </style>
 
     <script src="//unpkg.com/force-graph"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
     <!--<script src="../../dist/force-graph.js"></script>-->
 </head>
 
@@ -80,12 +81,7 @@
                 (document.getElementById('graph'))
                 .graphData(gData2)
                 .linkDirectionalArrowLength(3)
-                // .nodeLabel('char')
-                .onNodeClick(node => {
-                    // Center/zoom on node
-                    Graph.centerAt(node.x, node.y, 1000);
-                    Graph.zoom(8, 2000);
-                })
+
                 .nodeCanvasObject((node, ctx, globalScale) => {
                     const label = node.label || '';
                     const fontSize = 5;
@@ -107,11 +103,16 @@
                     })
                 .linkWidth(2)
                 .linkDirectionalArrowLength(3)
-                .nodeRelSize(5)
+                .nodeRelSize(3)
+                .nodeVal(node=>node.size)
                 .linkColor(()=>"#666666")
                 .nodeAutoColorBy(node => node.id)
                 .maxZoom(15)
                 .minZoom(1)
+                // .d3Force("collide", d3.forceCollide().radius(20)) // 충돌 힘 강도 낮춤
+                .d3Force("link", d3.forceLink().distance(50)) // 링크 힘 강도 낮춤
+                
+                
                 
 
         }
